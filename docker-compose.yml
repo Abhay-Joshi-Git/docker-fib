@@ -1,0 +1,29 @@
+version: '3'
+services: 
+  postgres:
+    image: 'postgres:latest'
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=test_db
+  redis:
+    image: 'redis:latest'
+  server:
+    depends_on:
+      - "postgres"
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./server
+    volumes: 
+      - /app/node_modules
+      - ./server:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PGUSER=postgres
+      - PGHOST=postgres
+      - PGDATABASE=test_db
+      - PGPASSWORD=test
+      - PGPORT=5432
