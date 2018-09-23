@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t abhayj/docker-fibo -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run abhayj/docker-fibo npm run test -- --coverage
+
+after_success:
+  - docker build -t abhayj/fibo-client ./client
+  - docker build -t abhayj/fibo-server ./server
+  - docker build -t abhayj/fibo-worker ./worker
+  - docker build -t abhayj/fibo-nginx ./nginx
+  # Log in docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # push images to docker-hub
+  - docker push abhayj/fibo-client
+  - docker push abhayj/fibo-server
+  - docker push abhayj/fibo-worker
+  - docker push abhayj/fibo-nginx
