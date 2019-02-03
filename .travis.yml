@@ -20,3 +20,16 @@ after_success:
   - docker push abhayj/fibo-server
   - docker push abhayj/fibo-worker
   - docker push abhayj/fibo-nginx
+
+deploy:
+  provider: elasticbeanstalk
+  region: "ap-south-1"
+  app: "multi-docker"
+  env: "MultiDocker-env"
+  bucket_name: "elasticbeanstalk-ap-south-1-768678370349"
+  bucket_path: "multi-docker"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
