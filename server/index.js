@@ -69,12 +69,10 @@ app.get('/', (req, res) => {
   res.send('Hi');
 });
 
-app.get('/values/all', (req, res) => {
-  // const values = await pgClient.query('SELECT * from values');
+app.get('/values/all', async (req, res) => {
+  const values = await pgClient.query('SELECT * from values');
 
-  res.send([{
-		number: 5
-	}]);
+  res.send(values.rows);
 });
 
 app.get('/values/current', async (req, res) => {
